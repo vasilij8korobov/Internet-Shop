@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }}</title>
+</head>
+<body>
+<h1>{{ product.name }}</h1>
+<p>Наименование: {{ product.name }}</p>
+<p>Описание: {{ product.description|truncatechars:100 }}</p>
+<p>Цена: {{ product.price }}</p>
+<p>Категория: {{ product.category }}</p>
+
+</body>
+</html>
