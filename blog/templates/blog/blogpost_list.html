@@ -1,0 +1,17 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Список статей{% endblock %}
+
+{% block content %}
+<h1>Список статей</h1>
+<a href="{% url 'blog:blogpost_create' %}" class="btn btn-primary mb-3">Создать статью</a>
+<ul>
+    {% for post in posts %}
+    <li>
+        <h2><a href="{% url 'blog:blogpost_detail' post.pk %}">{{ post.title }}</a></h2>
+        <p>{{ post.content|truncatewords:30 }}</p>
+        <p><small>Опубликовано: {{ post.created_at }}</small></p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
