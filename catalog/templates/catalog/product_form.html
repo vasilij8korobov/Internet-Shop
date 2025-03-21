@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if form.instance.pk %}Редактировать продукт{% else %}Добавить продукт{% endif %}</title>
+</head>
+<body>
+    <h1>{% if form.instance.pk %}Редактировать продукт{% else %}Добавить продукт{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ form.captcha }}
+        <button type="submit">Сохранить</button>
+    </form>
+    <a href="{% url 'catalog:product_list' %}">Назад к списку продуктов</a>
+</body>
+</html>
