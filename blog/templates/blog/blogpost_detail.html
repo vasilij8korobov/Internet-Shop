@@ -1,0 +1,14 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+<p><small>Опубликовано: {{ post.created_at }}</small></p>
+<p><small>Просмотров: {{ post.views_count }}</small></p>
+{% if post.preview_image %}
+<img src="{{ post.preview_image.url }}" alt="{{ post.title }}">
+{% endif %}
+<a href="{% url 'blog:blogpost_list' %}">Вернуться к списку статей</a>
+{% endblock %}
