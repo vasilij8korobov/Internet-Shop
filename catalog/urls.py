@@ -13,8 +13,7 @@ urlpatterns = [
     path('home/', HomeView.as_view(), name='home'),
     path('contacts/', ContactsView.as_view(), name='contacts'),
     path('product/<int:product_id>/', ProductDetailView.as_view(), name='product_detail'),
-    path('', ProductListView.as_view(), name='product_list'),
-    path('new/', ProductCreateView.as_view(), name='product_create'),
-    path('<int:pk>/edit/', ProductUpdateView.as_view(), name='product_update'),
-    path('<int:pk>/delete/', ProductDeleteView.as_view(), name='product_delete'),
+    path('product/new/', ProductCreateView.as_view(), name='product_create'),
+    path('product/<int:pk>/edit/', ProductUpdateView.as_view(), name='product_update'),
+    path('product/<int:pk>/delete/', ProductDeleteView.as_view(), name='product_delete'),
 ]
