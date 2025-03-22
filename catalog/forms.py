@@ -15,6 +15,12 @@ class ProductForm(forms.ModelForm):
         description = self.cleaned_data.get('description')
         return self.check_forbidden_words(description)
 
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if price is not None and price < 0:
+            raise forms.ValidationError("Цена не может быть отрицательной или отсутствовать.")
+        return price
+
     def check_forbidden_words(self, value):
         forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
         for word in forbidden_words:
