@@ -22,7 +22,7 @@ class ProductForm(forms.ModelForm):
         return self.check_forbidden_words(description)
 
     def clean_price(self):
-        price = self.cleaned_data.get('price')
+        price = self.cleaned_data['price']
         if price is not None and price < 0:
             raise forms.ValidationError("Цена не может быть отрицательной или отсутствовать.")
         return price
