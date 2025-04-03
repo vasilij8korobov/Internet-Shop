@@ -7,7 +7,7 @@ from .forms import CustomUserCreationForm
 class RegisterView(CreateView):
     template_name = 'users/register.html'
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('catalog:product_list')  # Замените 'home' на имя вашего маршрута
+    success_url = reverse_lazy('catalog:base')
 
     def form_valid(self, form):
         user = form.save()

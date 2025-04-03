@@ -6,7 +6,7 @@ from .models import Product
 
 
 class ProductForm(forms.ModelForm):
-    price = forms.IntegerField(validators=[MinValueValidator(0)])
+    price = forms.IntegerField(validators=[MinValueValidator(0)], label='Цена')
 
     class Meta:
         model = Product
@@ -26,11 +26,6 @@ class ProductForm(forms.ModelForm):
         description = self.cleaned_data.get('description')
         return self.check_forbidden_words(description)
 
-    # def clean_price(self):
-    #     price = self.cleaned_data['price']
-    #     if price is not None and price < 0:
-    #         raise ValidationError("Цена не может быть отрицательной или отсутствовать.")
-    #     return price
 
     def clean_image(self):
         image = self.cleaned_data.get('image')
