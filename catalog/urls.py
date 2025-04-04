@@ -6,12 +6,9 @@ from .views import HomeView, ContactsView, ProductDetailView, ProductListView, P
 app_name = 'catalog'
 
 urlpatterns = [
-    # path('home/', views.home, name='home'),
-    # path('contacts/', views.contacts, name='contacts'),
-    # path('product/<int:product_id>/', views.product_detail, name='product_detail'),
-
     path('home/', HomeView.as_view(), name='home'),
     path('contacts/', ContactsView.as_view(), name='contacts'),
+    path('products/', ProductListView.as_view(), name='product_list'),
     path('product/<int:product_id>/', ProductDetailView.as_view(), name='product_detail'),
     path('product/new/', ProductCreateView.as_view(), name='product_create'),
     path('product/<int:pk>/edit/', ProductUpdateView.as_view(), name='product_update'),

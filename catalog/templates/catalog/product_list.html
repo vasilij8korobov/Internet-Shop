@@ -1,19 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Список продуктов</title>
-</head>
-<body>
-    <h1>Список продуктов</h1>
-    <a href="{% url 'catalog:product_create' %}">Добавить новый продукт</a>
-    <ul>
-        {% for product in products %}
-            <li>
-                {{ product.name }} - {{ product.price }}
-                <a href="{% url 'catalog:product_update' product.pk %}">Редактировать</a>
-                <a href="{% url 'catalog:product_delete' product.pk %}">Удалить</a>
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'catalog/base.html' %}
+
+{% block title %}Список продуктов{% endblock %}
+
+{% block content %}
+<h1>Список продуктов</h1>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'catalog:product_create' %}" class="btn btn-primary mb-3">Создать продукт</a>
+{% endif %}
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-3">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
+            </div>
+            <div class="card-body">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+                {% else %}
+                    <p>Изображение отсутствует</p>
+                {% endif %}
+                <h1 class="card-title pricing-card-title">{{ product.price }}</h1>
+                <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-outline-secondary">Редактировать</a>
+                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-outline-danger">Удалить</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
