@@ -11,5 +11,12 @@
 <p>Цена: {{ product.price }}</p>
 <p>Категория: {{ product.category }}</p>
 
+{% if can_unpublish %}
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Снять продукт с публикации</button>
+    </form>
+{% endif %}
+
 </body>
 </html>
