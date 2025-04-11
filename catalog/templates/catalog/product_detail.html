@@ -11,5 +11,17 @@
 <p>Цена: {{ product.price }}</p>
 <p>Категория: {{ product.category }}</p>
 
+{% if user == product.owner or user.has_perm 'catalog.can_unpublish_product' %}
+    <a href="{% url 'catalog:product_update' product.id %}">Редактировать</a>
+    <a href="{% url 'catalog:product_delete' product.id %}">Удалить</a>
+{% endif %}
+
+{% if can_unpublish %}
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Снять продукт с публикации</button>
+    </form>
+{% endif %}
+
 </body>
 </html>
