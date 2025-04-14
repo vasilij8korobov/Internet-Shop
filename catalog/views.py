@@ -2,14 +2,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import ProductForm
-from .models import Product, Category
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
-from .services import get_products_by_category
+from .services import get_products_by_category, get_cached_products
+from .forms import ProductForm
+from .models import Product, Category
 
 
 class HomeView(ListView):
@@ -59,6 +60,9 @@ class ProductListView(ListView):
     model = Product
     template_name = 'catalog/product_list.html'
     context_object_name = 'products'
+
+    def get_queryset(self):
+        return get_cached_products()
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
