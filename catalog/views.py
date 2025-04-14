@@ -5,9 +5,11 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import ProductForm
-from .models import Product
+from .models import Product, Category
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
+
+from .services import get_products_by_category
 
 
 class HomeView(ListView):
@@ -97,3 +99,16 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
         if product.owner != request.user and not request.user.has_perm('catalog.delete_product'):
             return HttpResponseForbidden("У вас нет прав для удаления этого продукта.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class ProductsByCategoryView(View):
+    template_name = 'catalog/products_by_category.html'
+
+    def get(self, request, category_id):
+        products = get_products_by_category(category_id)
+        category = get_object_or_404(Category, id=category_id)
+        context = {
+            'category': category,
+            'products': products
+        }
+        return render(request, self.template_name, context)
