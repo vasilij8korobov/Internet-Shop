@@ -6,6 +6,8 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import ProductForm
 from .models import Product
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 
 class HomeView(ListView):
@@ -45,6 +47,10 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
             return HttpResponse('Продукт успешно снят с публикации.')
         else:
             return HttpResponseForbidden('У вас нет прав для снятия этого продукта с публикации.')
+
+    @method_decorator(cache_page(60 * 15))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 
 class ProductListView(ListView):
