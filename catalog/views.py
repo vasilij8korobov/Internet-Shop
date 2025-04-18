@@ -2,10 +2,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+
+from .services import get_products_by_category, get_cached_products
 from .forms import ProductForm
-from .models import Product
+from .models import Product, Category
 
 
 class HomeView(ListView):
@@ -46,11 +51,18 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         else:
             return HttpResponseForbidden('У вас нет прав для снятия этого продукта с публикации.')
 
+    @method_decorator(cache_page(60 * 15))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 class ProductListView(ListView):
     model = Product
     template_name = 'catalog/product_list.html'
     context_object_name = 'products'
+
+    def get_queryset(self):
+        return get_cached_products()
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -91,3 +103,16 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
         if product.owner != request.user and not request.user.has_perm('catalog.delete_product'):
             return HttpResponseForbidden("У вас нет прав для удаления этого продукта.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class ProductsByCategoryView(View):
+    template_name = 'catalog/products_by_category.html'
+
+    def get(self, request, category_id):
+        products = get_products_by_category(category_id)
+        category = get_object_or_404(Category, id=category_id)
+        context = {
+            'category': category,
+            'products': products
+        }
+        return render(request, self.template_name, context)
